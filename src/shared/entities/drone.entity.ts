@@ -1,1 +1,1 @@
-import {} from 'typeorm';
+export class Drone {}

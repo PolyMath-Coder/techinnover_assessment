@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { DronesService } from './drones.service';
 import { CreateDroneDto } from './dto/create-drone.dto';
 import { UpdateDroneDto } from './dto/update-drone.dto';
@@ -7,7 +15,7 @@ import { UpdateDroneDto } from './dto/update-drone.dto';
 export class DronesController {
   constructor(private readonly dronesService: DronesService) {}
 
-  @Post()
+  @Post('register')
   create(@Body() createDroneDto: CreateDroneDto) {
     return this.dronesService.create(createDroneDto);
   }
