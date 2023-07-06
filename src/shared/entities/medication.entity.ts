@@ -1,7 +1,8 @@
-import { Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { DroneEntity } from './drone.entity';
 
+@Entity('medications')
 export class MedicationEntity extends BaseEntity {
   @Column()
   name: string;

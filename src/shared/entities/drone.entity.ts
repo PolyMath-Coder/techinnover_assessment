@@ -4,6 +4,7 @@ import { BaseEntity } from './base.entity';
 import { MedicationEntity } from './medication.entity';
 import { stateEnum } from '../enums';
 
+@Entity('drones')
 export class DroneEntity extends BaseEntity {
   @Column()
   serialNumber: number;
@@ -20,9 +21,6 @@ export class DroneEntity extends BaseEntity {
   @Column({ type: 'enum', enum: stateEnum, default: stateEnum.IDLE })
   state: string;
 
-  @Column()
-  @OneToMany(() => MedicationEntity, (medication) => medication.drone, {
-    eager: true,
-  })
+  @OneToMany(() => MedicationEntity, (medication) => medication.drone)
   medications: MedicationEntity[];
 }

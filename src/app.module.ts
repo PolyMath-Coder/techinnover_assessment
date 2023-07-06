@@ -4,7 +4,10 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { DronesModule } from './drones/drones.module';
+import { FileUploadService } from './shared/file-upload/file-upload.service';
 import { MedicationsModule } from './medications/medications.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -21,12 +24,14 @@ import { MedicationsModule } from './medications/medications.module';
       entities: ['dist/**/*.entity.js'],
       migrations: ['dist/migrations/*.js'],
       migrationsRun: true,
-      synchronize: false,
+      synchronize: true,
     }),
     DronesModule,
     MedicationsModule,
+    CloudinaryModule,
+    MulterModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, FileUploadService],
 })
 export class AppModule {}

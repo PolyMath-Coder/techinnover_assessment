@@ -10,14 +10,15 @@ import {
 import { DronesService } from './drones.service';
 import { CreateDroneDto } from './dto/create-drone.dto';
 import { UpdateDroneDto } from './dto/update-drone.dto';
+import { InjectRepository } from '@nestjs/typeorm';
 
-@Controller('drones')
+@Controller('drone')
 export class DronesController {
   constructor(private readonly dronesService: DronesService) {}
 
   @Post('register')
-  create(@Body() createDroneDto: CreateDroneDto) {
-    return this.dronesService.create(createDroneDto);
+  registerDrone(@Body() createDroneDto: CreateDroneDto) {
+    return this.dronesService.registerDrone(createDroneDto);
   }
 
   @Get()
