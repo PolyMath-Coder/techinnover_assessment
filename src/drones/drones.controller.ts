@@ -46,6 +46,16 @@ export class DronesController {
     return this.dronesService.checkMedItems(droneId);
   }
 
+  @Get('/available/all')
+  async checkAvailableDrones() {
+    return await this.dronesService.checkAvailableDrones();
+  }
+
+  @Get()
+  async checkDroneBatteryLevel(@Query('droneId') droneId: string) {
+    return await this.dronesService.checkDroneBatteryLevel(droneId);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDroneDto: UpdateDroneDto) {
     return this.dronesService.update(+id, updateDroneDto);

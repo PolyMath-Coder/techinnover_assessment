@@ -7,6 +7,7 @@ import { UpdateDroneDto } from './dto/update-drone.dto';
 import { MedicationEntity } from 'src/shared/entities/medication.entity';
 import { CreateMedicationDto } from '../medications/dto/create-medication.dto';
 import { CustomError } from '../shared/utils/error';
+import { stateEnum } from '../shared/enums';
 
 @Injectable()
 export class DronesService {
@@ -24,9 +25,6 @@ export class DronesService {
 
   async loadDrone(droneId, createMedication: CreateMedicationDto) {
     const { name, weight, code, image } = createMedication;
-    // const inputtedMedication = await this.medicationRepository.create(
-    //   createMedication,
-    // );
     const { batteryCapacity, weightLimit } = await this.droneRepository.findOne(
       { where: { id: droneId } },
     );
@@ -43,6 +41,11 @@ export class DronesService {
       );
     }
 
+    await this.droneRepository.update(
+      { id: droneId },
+      { state: stateEnum.LOADING },
+    );
+
     return await this.medicationRepository.save({
       name,
       weight,
@@ -55,7 +58,7 @@ export class DronesService {
   async checkMedItems(drone) {
     return await this.medicationRepository
       .createQueryBuilder('medications')
-      .where(`medications.droneId = :droneId`, { droneId: drone })
+      .where(`droneId = :droneId`, { droneId: drone })
       .select([
         'medications.name',
         'medications.weight',
@@ -63,6 +66,26 @@ export class DronesService {
         'medications.image',
       ])
       .getMany();
+  }
+
+  async checkAvailableDrones() {
+    try {
+      return await this.droneRepository.find({
+        where: { state: stateEnum.IDLE },
+      });
+    } catch (error) {
+      throw new CustomError(
+        'Unable to fetch available drone...',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async checkDroneBatteryLevel(droneId): Promise<string> {
+    const { batteryCapacity } = await this.droneRepository.findOne({
+      where: { id: droneId },
+    });
+    return `The battery capacity for this drone is ${batteryCapacity}%`;
   }
 
   update(id: number, updateDroneDto: UpdateDroneDto) {
