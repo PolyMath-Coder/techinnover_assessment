@@ -68,14 +68,4 @@ export class DronesController {
   async checkDroneBatteryLevel(@Query('droneId') droneId: string) {
     return await this.dronesService.checkDroneBatteryLevel(droneId);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDroneDto: UpdateDroneDto) {
-    return this.dronesService.update(+id, updateDroneDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.dronesService.remove(+id);
-  }
 }

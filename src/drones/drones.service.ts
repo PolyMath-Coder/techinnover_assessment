@@ -87,12 +87,4 @@ export class DronesService {
     });
     return `The battery capacity for this drone is ${batteryCapacity}%`;
   }
-
-  update(id: number, updateDroneDto: UpdateDroneDto) {
-    return `This action updates a #${id} drone`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} drone`;
-  }
 }
