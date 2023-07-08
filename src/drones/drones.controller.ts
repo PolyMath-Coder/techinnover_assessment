@@ -6,10 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
+  Query,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { DronesService } from './drones.service';
 import { CreateDroneDto } from './dto/create-drone.dto';
 import { UpdateDroneDto } from './dto/update-drone.dto';
+import { CreateMedicationDto } from '../medications/dto/create-medication.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Controller('drone')
@@ -21,14 +26,24 @@ export class DronesController {
     return this.dronesService.registerDrone(createDroneDto);
   }
 
-  @Get()
-  findAll() {
-    return this.dronesService.findAll();
+  @Put('load/medication')
+  async loadDrone(
+    @Query('droneId') droneId: string,
+    @Body() createMedicationDto: CreateMedicationDto,
+  ) {
+    try {
+      return await this.dronesService.loadDrone(droneId, createMedicationDto);
+    } catch (error) {
+      throw new HttpException(
+        error.message,
+        error.response?.statusCode || HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.dronesService.findOne(+id);
+  @Get('check/items/:droneId')
+  checkDroneMedItems(@Param('droneId') droneId: string) {
+    return this.dronesService.checkMedItems(droneId);
   }
 
   @Patch(':id')

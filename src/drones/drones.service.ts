@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DroneEntity } from '../shared/entities/drone.entity';
 import { CreateDroneDto } from './dto/create-drone.dto';
 import { UpdateDroneDto } from './dto/update-drone.dto';
 import { MedicationEntity } from 'src/shared/entities/medication.entity';
+import { CreateMedicationDto } from '../medications/dto/create-medication.dto';
+import { CustomError } from '../shared/utils/error';
 
 @Injectable()
 export class DronesService {
@@ -15,16 +17,52 @@ export class DronesService {
     private medicationRepository: Repository<MedicationEntity>,
   ) {}
   async registerDrone(createDroneDto: CreateDroneDto) {
-    const data = await this.droneRepository.create(createDroneDto);
-    console.log(data);
+    const data = await this.droneRepository.save(createDroneDto);
+
+    return data;
   }
 
-  findAll() {
-    return `This action returns all drones`;
+  async loadDrone(droneId, createMedication: CreateMedicationDto) {
+    const { name, weight, code, image } = createMedication;
+    // const inputtedMedication = await this.medicationRepository.create(
+    //   createMedication,
+    // );
+    const { batteryCapacity, weightLimit } = await this.droneRepository.findOne(
+      { where: { id: droneId } },
+    );
+    if (batteryCapacity < 25) {
+      throw new CustomError(
+        'Oops! This drone has a really low battery capacity...',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (weight > 500) {
+      throw new CustomError(
+        "Oops! This medication exceeds the drone's weight limit...",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return await this.medicationRepository.save({
+      name,
+      weight,
+      code,
+      image,
+      droneId,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} drone`;
+  async checkMedItems(drone) {
+    return await this.medicationRepository
+      .createQueryBuilder('medications')
+      .where(`medications.droneId = :droneId`, { droneId: drone })
+      .select([
+        'medications.name',
+        'medications.weight',
+        'medications.code',
+        'medications.image',
+      ])
+      .getMany();
   }
 
   update(id: number, updateDroneDto: UpdateDroneDto) {

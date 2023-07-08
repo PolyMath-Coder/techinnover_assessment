@@ -15,9 +15,9 @@ export class MedicationsService {
 
   async registerMedication(createMedicationDto: CreateMedicationDto) {
     console.log(createMedicationDto);
-    // const data = await this.medicationRepository.create(createMedicationDto);
-    const rawData = await this.medicationRepository.save(createMedicationDto);
-    console.log(rawData);
+
+    return await this.medicationRepository.save(createMedicationDto);
+
     // return 'This action adds a new medication';
   }
 

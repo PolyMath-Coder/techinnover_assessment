@@ -16,6 +16,9 @@ export class MedicationEntity extends BaseEntity {
   @Column()
   image?: string;
 
+  @Column()
+  droneId: string;
+
   @ManyToOne(() => DroneEntity, (drone) => drone.medications)
   drone: DroneEntity;
 }
