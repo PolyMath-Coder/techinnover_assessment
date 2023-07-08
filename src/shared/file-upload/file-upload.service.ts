@@ -13,7 +13,16 @@ export class FileUploadService {
     this.cloudinaryUploadService = cloudinary.uploader;
   }
 
-  uploadImage(file: Express.Multer.File): Promise<string> {
-    return;
+  uploadImage(imageFile: Express.Multer.File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const uploadStream = this.cloudinaryUploadService.upload_stream(
+        {},
+        (error: Error, result: UploadApiResponse) => {
+          if (result) resolve(result.secure_url);
+          else reject(error);
+        },
+      );
+      streamifier.createReadStream(imageFile.buffer).pipe(uploadStream);
+    });
   }
 }
