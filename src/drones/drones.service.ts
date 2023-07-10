@@ -81,10 +81,13 @@ export class DronesService {
     }
   }
 
-  async checkDroneBatteryLevel(droneId): Promise<string> {
+  async checkDroneBatteryLevel(droneId): Promise<object> {
     const { batteryCapacity } = await this.droneRepository.findOne({
       where: { id: droneId },
     });
-    return `The battery capacity for this drone is ${batteryCapacity}%`;
+    return {
+      status: true,
+      message: `The battery capacity for this drone is ${batteryCapacity}%`,
+    };
   }
 }
