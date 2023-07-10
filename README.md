@@ -22,6 +22,6 @@ The specific communication with the drone is outside the scope of this task.
 <a href="">![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)</a>
 <a href="">![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)</a>
 <a href="">![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)</a>
-<a href="">![MYSQL](https://img.shields.io/badge/mysql-%23007ACC.svg?style=for-the-badge&logo=mongodb&logoColor=white)</a>
+<a href="">![MYSQL](https://img.shields.io/badge/mysql-%23007ACC.svg?style=for-the-badge&logo=mysql&logoColor=white)</a>
 
 </div>
